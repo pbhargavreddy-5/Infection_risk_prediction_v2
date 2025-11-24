@@ -87,7 +87,7 @@ Cluster Breakdown (Last 20 Readings):
 
 
 Latest Sensor Readings at Time ({sensor_time_ist}):
-Temperature: {latest['temp']}
+Temperature: {latest['temperature']}
 Humidity: {latest['humidity']}
 Pressure: {latest['pressure']}
 PM2.5 (Dust): {latest['dust']}
@@ -119,7 +119,7 @@ rows = []
 for f in feeds:
     rows.append({
         "created_at": f.get("created_at"),
-        "temp":      safe_float(f.get("field1")),
+        "temperature":      safe_float(f.get("field1")),
         "humidity":  safe_float(f.get("field2")),
         "pressure":  safe_float(f.get("field3")),
         "dust":      safe_float(f.get("field4")),
@@ -131,7 +131,7 @@ df = pd.DataFrame(rows)
 
 
 # ML PREDICTION
-X = df[["temp", "humidity", "pressure", "dust", "co2", "tvoc"]]
+X = df[["temperature", "humidity", "pressure", "dust", "co2", "tvoc"]]
 scaled = scaler.transform(X)
 pca_out = pca.transform(scaled)
 predictions = model.predict(pca_out)
@@ -155,7 +155,7 @@ latest = df.iloc[-1].to_dict()
 
 update_payload = {
     "api_key": PREDICTION_WRITE_API_KEY,
-    "field1": latest["temp"],
+    "field1": latest["temperature"],
     "field2": latest["humidity"],
     "field3": latest["pressure"],
     "field4": latest["dust"],
